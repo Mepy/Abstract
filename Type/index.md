@@ -1,6 +1,6 @@
 ## 类型论
 ### 参考资料
-1. Introduction to Type Theory, OPLSS'22, Cosmo Viola, Nabil Hassein, Daniel Zackon, Jiawei Chen
+1. [Introduction to Type Theory, OPLSS'22](http://www.cs.nott.ac.uk/~psztxa/oplss-22/)
 
 ### 目录
 1. [引入](./intro.md) 

@@ -59,14 +59,14 @@ A → B → C ≠ (A → B) → C
 ```agda
 I :  A→A
 I x  = x
-_◦_ : (B→C) → (A→B) → (A→C)
-(f◦g) x = f (g x)
+_ ◦ _ : ( B → C ) → ( A → B ) → ( A → C )
+( f ◦ g ) x = f ( g x )
 
 K : A → B → A
 K a b = a
 
-S : (A→B→C) → (A→B) → (A→C)
-S f g x = f x (g x)
+S : ( A → B → C) → ( A → B ) → ( A → C )
+S f g x = f x ( g x )
 ```
 
 后两个组合子, **K** 和 **S** 等价于 λ-calculus.

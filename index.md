@@ -4,3 +4,5 @@
 
 ### 总纲
 1. [类型论](./Type/index.md)
+2. [范畴论](./Category/index.md)
+3. [证明论](./Proof/index.md)

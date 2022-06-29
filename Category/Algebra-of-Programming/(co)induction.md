@@ -1,80 +1,5 @@
-## 编程代数
-### 参考资料
-[Algebra of Programming, OPLSS'22](https://www.cs.uoregon.edu/research/summerschool/summer22/topics.php#Gibbons)
-[Calculating Functional Programs](www.cs.ox.ac.uk/publications/publication2360-abstract.html)
-[Fantastic Morphisms and Where to Find Them, A Guide to Recursion Schemes](https://arxiv.org/pdf/2202.13633.pdf)
+## (余)归纳 (Co)Induction
 
-### 积与分叉 Products & Forks
-集合论里的积是笛卡尔积, 这很直接.
-$$ A×B=\{(a,b):a∈A,b∈B\} $$
-然而范畴论里, 能复合的有且仅有 **态射 Morphism**, 定义如下:
-引入对象 $X$, 以及态射 $fst:X→A, snd:X→B$ .
-集合论里, $X=A×B$, $fst(a,b) = a, snd(a,b)=b$ 是 **投影 Projection**.
-范畴论里, 为得积的结构, 像引入单射和满射那样,
-$C∈Obj(\mathcal{C})$, 以及态射 $f:C→A, g:C→Bf:C→A,g:C→B$, 满足复合条件, 如下图所示.
-
-- 为什么是从 $C$ 射出而不是射入 $C$?
-    要求 $h$ 唯一, 如果反向, $f':A→C, g':B→C$
-    那么$h'_f=f'∘fst ≠ h'_g=g'∘snd$
-```
-        X
-fst ↙  ↑h ↘ snd
-  A ⟵ C ⟶ B
-     f    g
-```
-$$
-A×B:=(X, fst:X→A, snd:X→B) : \\
- ∀C, f:C→A, g:C→B, ∃!h, s.t. \\
-  f = fst ∘ h ∧ g = snd ∘ h \\
-$$
-如果 $h$ 存在唯一, 那么称 $h$ 是 $f$ 与 $g$ 的 **分叉 Fork**, 记作 $h=f△gh=f△g$.
-从交换图上来看, $f,g,h$ 自 $C$ **分叉** 出去.
-
-性质:
-- $fst∘(f△g)=f ∧ snd∘(f△g)=g$
-- $h = (fst∘h) △ (snd∘h)$
-- $fst△snd = id$
-- $(f△g)∘h=(f∘h)△(g∘h)$, 如图所示:
-    ```
-         D
-         ↓ h
-         C
-    f  ↙   ↘ g
-     A        B
-    ```
-
-类型论里, 积就是积类型:
-```OCaml
-type ('a, 'b) product = 'a * 'b;;
-```
-
-### 余积与汇聚 Coproducts & Joins
-将积定义中的交换图对偶, 我们便能得到余积的定义:
-$\downarrow$
-```
-        X
-inl ↗  ↓h ↖ inr
-  A ⟶ C ⟵ B
-     f    g
-```
-$$
-A+B:=(X, inl:A→X, snd:B→X) : \\
- ∀C, f:A→C, g:B→C, ∃!h, s.t. \\
-  f = h ∘ inl ∧ g = h ∘ inr \\
-$$
-如果 $h$ 存在唯一, 那么称 $h$ 是 $f$ 与 $g$ 的 **汇聚 Join**, 记作 $h=f▽g$
-从交换图上来看, $f,g,h$ **汇聚** 到 $C$.
-
-集合论里, 两个集合的 **余积 Coproduct** 或说 **和 Sum**, 定义为:
-$$ A + B = \{(0, a) | a ∈ A\} ∪ \{(1, b) | b ∈ B\} $$
-
-类型论里, 这是和类型, $inl$ 与 $inr$ 分别是左右构造器的名字.
-```OCaml
-type ('a, 'b) sum =
-    | Inl of 'a
-    | Inr of 'b
-    ;;
-```
 ### 函子 Functor
 范畴论里, 函子是范畴之间的映射 $F:\mathcal{C}→\mathcal{D}$,
 将对象映射到对象, 将对象间的态射映射到对应对象间的态射.
@@ -108,15 +33,15 @@ $$
 
 类型范畴里, 不动点有两个:(参见[TaPL](https://www.cis.upenn.edu/~bcpierce/tapl/)第21章)
 
-- 最小不动点 μFμF 也称
+- 最小不动点 $μF$ 也称
     **归纳类型 Inductive Types**
     **初代数 Initial Algebra**
-- 最大不动点 νFνF 也称
+- 最大不动点 $νF$ 也称
     **余归纳类型 Coinductive Types**
     **终代数 Terminal Algebra**
 
 ### * 函子代数 F-Algebra 
-**初代数** 与 **终代数**.
+关于 **初代数** 与 **终代数**, 本节函子不限于多项式自函子.
 
 所谓[函子代数](https://en.wikipedia.org/wiki/F-algebra), 给定一个范畴 $\mathcal{C}$ 及其上的自函子 $F:\mathcal{C}→\mathcal{C}$,
 $(A, α:F(A)→A)$ 是一个**函子代数 F-Algebra**,
@@ -124,7 +49,7 @@ $(A, α:F(A)→A)$ 是一个**函子代数 F-Algebra**,
 上下文自明时, 可以称载子 $A$ 是一个函子代数.
 
 函子代数构成范畴, 函子代数 $(A, α)$ 与 $(B, β)$ 之间的态射 $f:A→B$ 满足:
-$$ f∘α = β∘F(f)$$ 
+$$ f∘α = β∘F(f) $$ 
 
 ```
     F(f)
@@ -138,6 +63,9 @@ F(A) ⟶ F(B)
 $$ ∀X∈Obj(\mathcal{C}), ∃!f:I→X $$
 
 **初代数 Initial Algebra** 是函子代数范畴中的初对象.
+
+[Lambek's theorem](https://ncatlab.org/nlab/show/initial+algebra+of+an+endofunctor) 证明了初代数是不动点,另见[Algebraic Approaches to Program Semantics ](https://link.springer.com/book/10.1007/978-1-4612-4962-7).
+
 **终代数 Terminal Algebra** 是对偶的.
 
 ### 折叠 Folds
@@ -237,12 +165,12 @@ out (Out x) = x
 data Nu f a = UnOut {out :: f a (Nu f a)}
 type Colist a = Nu L a
 ```
-关于 In, Out 与 UnOut, 其实不太懂.
+关于 `In`, `Out` 与 `UnOut`, 其实不太懂.
 
 ### 向下态射与向上态射 Catamorphism & Anamorphism
 上述两节, 仅有类型(对象)的 Haskell 实现, 未有函数(态射)的 Haskell 实现,
 即如何实现 $h$, 或更确切地说, 实现向下态射 $\text{cata}$ 与向上态射 $\text{ana}$.
-注意, 向下态射与向上态射是另一个范畴(即函子代数范畴, 见下)的态射.
+注意, 向下态射与向上态射是另一个范畴(即函子代数范畴)的态射.
 
 前文说的自函子, 均是一元运算, 我们需要二元函子
 $F:(\mathcal{C},\mathcal{C})→\mathcal{C}$
